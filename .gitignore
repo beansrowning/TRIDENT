@@ -55,3 +55,8 @@ test_processor_output/
 test_single_slide_processing/
 tests/test_patcher_artifacts/
 rosai_processed/
+tutorials/tutorial-1/
+
+# Secrets
+.env
+.devcontainer/certs
