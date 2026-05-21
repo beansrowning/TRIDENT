@@ -3,14 +3,21 @@
 	"name": "Pytorch GPU",
 	"build": {
 		"context": "..",
-		"dockerfile": "Dockerfile"
+		"dockerfile": "Dockerfile",
+		"target": "dev"
 	},
 
 	// 1. Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": []
 
 	// 2. Use 'mounts' to make a list of local directories available inside the container. More info: https://code.visualstudio.com/remote/advancedcontainers/add-local-file-mount
-	// "mounts": [],
+	"mounts": [
+		{
+		"type": "bind",
+		"source": "/mnt/at2",
+		"target": "/mnt/at2"
+		}
+	],
 
 	// 3. Use 'runArgs' to pass arguments to the container. 
 	// run the container with all GPUs
