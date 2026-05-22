@@ -8,6 +8,7 @@ python run_single_slide.py --slide_path output/wsis/394140.svs --job_dir output/
 """
 import argparse
 import os
+from pathlib import Path
 
 from trident import load_wsi
 from trident.segmentation_models import segmentation_model_factory
@@ -15,6 +16,16 @@ from trident.patch_encoder_models import encoder_factory
 from trident.patch_encoder_models import encoder_registry as patch_encoder_registry
 from trident.Summary import start_run, finalize_run
 
+CA_CERT_BUNDLE_PATH = Path("/etc/ssl/certs/ca-certificates.crt")
+
+def configure_ca_bundle(ca_path: Path = CA_CERT_BUNDLE_PATH):
+    """
+    HACK: A Helper to handle CA Cert bundle on WSL2
+    for machines behind self-signed cert
+    """
+    # httpx/certifi may not pick up WSL's system trust store by default.
+    for env_var in ("SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "CURL_CA_BUNDLE"):
+        os.environ.setdefault(env_var, str(ca_path))
 
 def parse_arguments():
     """
@@ -155,6 +166,7 @@ def process_slide(args):
 
 def main():
     args = parse_arguments()
+    configure_ca_bundle() # HACK: CDC self-signed certs
     run_id = start_run(args.job_dir, tool="run_single_slide", args=vars(args))
     run_status = "completed"
     run_error = None
