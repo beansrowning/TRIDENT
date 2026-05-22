@@ -42,5 +42,5 @@ FROM deps AS runtime
 COPY . .
 RUN pip install --constraint /etc/pip/constraint.txt --no-deps .
 
-ENTRYPOINT ["python"]
-CMD ["run_single_slide.py"]
+ENTRYPOINT ["python", "run_single_slide.py"]
+CMD ["--help"]
